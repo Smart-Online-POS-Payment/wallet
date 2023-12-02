@@ -3,8 +3,9 @@ package com.sopp.wallet.controller
 import com.sopp.wallet.entity.WalletEntity
 import com.sopp.wallet.exception.PaymentExceedsBalanceException
 import com.sopp.wallet.exception.WalletNotFoundException
+import com.sopp.wallet.model.CardModel
 import com.sopp.wallet.model.ResponseModel
-import com.sopp.wallet.model.WalletModel
+import com.sopp.wallet.service.CardService
 import com.sopp.wallet.service.WalletService
 import org.springframework.http.HttpStatusCode
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -21,7 +22,8 @@ import java.math.BigDecimal
 @RestController
 @RequestMapping("wallet")
 class WalletController(
-    private val walletService: WalletService
+    private val walletService: WalletService,
+    private val cardService: CardService
 ) {
 
     @GetMapping("/{customerId}")
@@ -34,13 +36,13 @@ class WalletController(
         }
     }
 
-    @PostMapping
-    fun createWallet(@RequestBody walletModel: WalletModel){
-        walletService.createWallet(walletModel)
+    @PostMapping("/{customerId}")
+    fun createWallet(@PathVariable customerId: String){
+        walletService.createWallet(customerId)
     }
 
     @PutMapping("/{customerId}/amount/{amount}")
-    fun addMoneyToWallet(@PathVariable customerId: String, @PathVariable amount: BigDecimal){
+    fun addMoneyToWallet(@PathVariable customerId: String, @PathVariable amount: BigDecimal, @RequestBody cardModel: CardModel){
         try {
             walletService.addMoneyToWallet(amount, customerId)
         }
@@ -60,5 +62,10 @@ class WalletController(
         } catch (ex: PaymentExceedsBalanceException){
             ResponseModel("500","Payment exceeds balance")
         }
+    }
+
+    @GetMapping("/{customerId}/cards")
+    fun getCards(@PathVariable customerId: String): List<CardModel> {
+        return cardService.getCards(customerId)
     }
 }

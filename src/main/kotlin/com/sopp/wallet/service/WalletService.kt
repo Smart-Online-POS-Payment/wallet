@@ -1,11 +1,10 @@
 package com.sopp.wallet.service
 
 import com.sopp.wallet.entity.WalletEntity
+import com.sopp.wallet.exception.NegativeAmountException
 import com.sopp.wallet.exception.PaymentExceedsBalanceException
 import com.sopp.wallet.exception.WalletNotFoundException
-import com.sopp.wallet.model.WalletModel
 import com.sopp.wallet.repository.WalletRepository
-import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
@@ -18,13 +17,15 @@ class WalletService(
         return walletRepository.findByCustomerId(customerId) ?: throw WalletNotFoundException("Cant find the wallet")
     }
 
-    fun createWallet(walletModel: WalletModel){
-        walletRepository.save(WalletEntity(walletModel))
+    fun createWallet(customerId: String){
+        walletRepository.save(WalletEntity(customerId = customerId, balance = BigDecimal.ZERO))
     }
 
     fun addMoneyToWallet(amount: BigDecimal, customerId: String){
+        if(amount <= BigDecimal.ZERO) throw NegativeAmountException()
+
         val walletEntity = walletRepository.findByCustomerId(customerId)
-            ?: throw WalletNotFoundException("Cant find the wallet")
+            ?: throw WalletNotFoundException("Can't find the wallet")
         walletEntity.balance+=amount
         walletRepository.save(walletEntity)
     }
