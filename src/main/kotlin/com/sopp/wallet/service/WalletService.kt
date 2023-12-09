@@ -17,8 +17,8 @@ class WalletService(
         return walletRepository.findByCustomerId(customerId) ?: throw WalletNotFoundException("Cant find the wallet")
     }
 
-    fun createWallet(customerId: String){
-        walletRepository.save(WalletEntity(customerId = customerId, balance = BigDecimal.ZERO))
+    fun createWallet(customerId: String): WalletEntity {
+        return walletRepository.save(WalletEntity(customerId = customerId, balance = BigDecimal.ZERO))
     }
 
     fun addMoneyToWallet(amount: BigDecimal, customerId: String){

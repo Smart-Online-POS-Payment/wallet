@@ -37,17 +37,27 @@ class WalletController(
     }
 
     @PostMapping("/{customerId}")
-    fun createWallet(@PathVariable customerId: String){
-        walletService.createWallet(customerId)
+    fun createWallet(@PathVariable customerId: String): WalletEntity {
+        return walletService.createWallet(customerId)
     }
 
     @PutMapping("/{customerId}/amount/{amount}")
-    fun addMoneyToWallet(@PathVariable customerId: String, @PathVariable amount: BigDecimal, @RequestBody cardModel: CardModel){
-        try {
+    fun addMoneyToWallet(@PathVariable customerId: String, @PathVariable amount: BigDecimal): ResponseModel {
+        return try {
             walletService.addMoneyToWallet(amount, customerId)
+            ResponseModel("200", "Success")
+        } catch (ex: WalletNotFoundException){
+            ResponseModel("404","Wallet not found")
         }
-        catch (ex: WalletNotFoundException){
-            throw ResponseStatusException(HttpStatusCode.valueOf(404), ex.localizedMessage, ex)
+    }
+
+    @PutMapping("card-payment/{customerId}/amount/{amount}")
+    fun addMoneyToWalletFromCard(@PathVariable customerId: String, @PathVariable amount: BigDecimal, @RequestBody cardModel: CardModel): ResponseModel {
+        return try {
+            walletService.addMoneyToWallet(amount, customerId)
+            ResponseModel("200", "Success")
+        } catch (ex: WalletNotFoundException){
+            ResponseModel("404","Wallet not found")
         }
     }
 
