@@ -52,9 +52,9 @@ class WalletController(
     }
 
     @PutMapping("card-payment/{customerId}/amount/{amount}")
-    fun addMoneyToWalletFromCard(@PathVariable customerId: String, @PathVariable amount: BigDecimal, @RequestBody cardModel: CardModel): ResponseModel {
+    suspend fun addMoneyToWalletFromCard(@PathVariable customerId: String, @PathVariable amount: BigDecimal, @RequestBody cardModel: CardModel): ResponseModel {
         return try {
-            walletService.addMoneyToWallet(amount, customerId)
+            walletService.depositMoneyToWallet(amount, customerId, cardModel)
             ResponseModel("200", "Success")
         } catch (ex: WalletNotFoundException){
             ResponseModel("404","Wallet not found")
@@ -77,5 +77,10 @@ class WalletController(
     @GetMapping("/{customerId}/cards")
     fun getCards(@PathVariable customerId: String): List<CardModel> {
         return cardService.getCards(customerId)
+    }
+
+    @PostMapping("/{customerId}/cards")
+    fun saveCard(@RequestBody cardModel: CardModel, @PathVariable customerId: String){
+        cardService.saveCard(customerId, cardModel)
     }
 }

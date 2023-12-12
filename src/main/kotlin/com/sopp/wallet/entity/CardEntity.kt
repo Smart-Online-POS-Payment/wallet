@@ -16,8 +16,8 @@ data class CardEntity(
     val cardNumber: String,
     val cardHolderName: String,
     val cvvCode: String,
-    val expiryDate: LocalDate,
+    val expiryDate: String,
 ){
     constructor(customerId: String, cardModel: CardModel): this(UUID.randomUUID(), customerId, cardModel.cardNumber, cardModel.cardHolderName, cardModel.cvvCode, cardModel.expiryDate)
-    constructor() : this(UUID.randomUUID(), "", "", "", "", LocalDate.now())
+    constructor() : this(UUID.randomUUID(), "", "", "", "", LocalDate.now().toString())
 }

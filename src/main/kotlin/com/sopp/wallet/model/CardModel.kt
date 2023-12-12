@@ -7,7 +7,7 @@ data class CardModel(
     val cardNumber: String,
     val cardHolderName: String,
     val cvvCode: String,
-    val expiryDate: LocalDate,
+    val expiryDate: String,
 ){
-    constructor(cardEntity: CardEntity): this(cardEntity.cardNumber, cardEntity.cardHolderName, cardEntity.cvvCode, cardEntity.expiryDate)
+    constructor(cardEntity: CardEntity): this(cardEntity.cardNumber, cardEntity.cardHolderName, cardEntity.cvvCode, cardEntity.expiryDate.toString())
 }

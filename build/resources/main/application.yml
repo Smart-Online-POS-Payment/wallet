@@ -18,3 +18,9 @@ database:
   password: KP^FOz63OneNl{dH
 server:
   port: 8082
+sopp:
+  server:
+    auth:
+      url: http://localhost:8081
+istepay:
+  url: http://localhost:10000
