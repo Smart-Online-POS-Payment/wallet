@@ -12,10 +12,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 database:
-  endpoint: localhost:5432
-  name: sopp
-  user: db_user
-  password: db_pass
+  endpoint: ${ENDPOINT}
+  name: ${NAME}
+  user: ${USER}
+  password: ${PASSWORD}
 server:
   port: 8082
 sopp:
