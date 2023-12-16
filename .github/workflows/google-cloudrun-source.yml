@@ -74,6 +74,14 @@ jobs:
         with:
           credentials_json: '${{ secrets.DEPLOYMENT_CREDENTIAL}}'
 
+      - name: Set Java Version
+        run: |
+          gcloud run services update ${{ env.SERVICE }} \
+            --region=${{ env.REGION }} \
+            --update-env-vars="GOOGLE_CLOUD_RUN_JAVA_VERSION=21"
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.DEPLOYMENT_CREDENTIAL}}
+
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
@@ -83,6 +91,6 @@ jobs:
           # NOTE: If required, update to the appropriate source folder
           source: ./
 
-      # If required, use the Cloud Run url output in later steps
+      # If required, use the Cloud Run URL output in later steps
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
