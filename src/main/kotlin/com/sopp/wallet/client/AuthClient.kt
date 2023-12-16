@@ -9,9 +9,9 @@ import org.springframework.web.reactive.function.client.awaitBody
 @Service
 class AuthClient(
     @Qualifier("authWebClient")
-    val client: WebClient
+    val client: WebClient,
 ) {
-   suspend fun getUser(customerId:String): VerifiedUserModel {
-       return client.get().uri("/customer/$customerId").retrieve().awaitBody()
-   }
+    suspend fun getUser(customerId: String): VerifiedUserModel {
+        return client.get().uri("/customer/$customerId").retrieve().awaitBody()
+    }
 }

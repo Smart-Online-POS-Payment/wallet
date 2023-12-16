@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthService(
-    private val authClient: AuthClient
+    private val authClient: AuthClient,
 ) {
     suspend fun getUser(customerId: String): VerifiedUserModel {
         return authClient.getUser(customerId)

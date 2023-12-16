@@ -2,7 +2,7 @@ package com.sopp.wallet.model
 
 import java.math.BigDecimal
 import java.time.Instant
-import java.util.*
+import java.util.UUID
 
 data class TransactionResponse(
     val id: UUID,

@@ -23,64 +23,80 @@ import java.math.BigDecimal
 @RequestMapping("wallet")
 class WalletController(
     private val walletService: WalletService,
-    private val cardService: CardService
+    private val cardService: CardService,
 ) {
-
     @GetMapping("/{customerId}")
-    fun getWallet(@PathVariable customerId: String): WalletEntity {
+    fun getWallet(
+        @PathVariable customerId: String,
+    ): WalletEntity {
         try {
             return walletService.getWallet(customerId)
-        }
-        catch (ex: WalletNotFoundException){
+        } catch (ex: WalletNotFoundException) {
             throw ResponseStatusException(HttpStatusCode.valueOf(404), ex.localizedMessage, ex)
         }
     }
 
     @PostMapping("/{customerId}")
-    fun createWallet(@PathVariable customerId: String): WalletEntity {
+    fun createWallet(
+        @PathVariable customerId: String,
+    ): WalletEntity {
         return walletService.createWallet(customerId)
     }
 
     @PutMapping("/{customerId}/amount/{amount}")
-    fun addMoneyToWallet(@PathVariable customerId: String, @PathVariable amount: BigDecimal): ResponseModel {
+    fun addMoneyToWallet(
+        @PathVariable customerId: String,
+        @PathVariable amount: BigDecimal,
+    ): ResponseModel {
         return try {
             walletService.addMoneyToWallet(amount, customerId)
             ResponseModel("200", "Success")
-        } catch (ex: WalletNotFoundException){
-            ResponseModel("404","Wallet not found")
+        } catch (ex: WalletNotFoundException) {
+            ResponseModel("404", "Wallet not found")
         }
     }
 
     @PutMapping("card-payment/{customerId}/amount/{amount}")
-    suspend fun addMoneyToWalletFromCard(@PathVariable customerId: String, @PathVariable amount: BigDecimal, @RequestBody cardModel: CardModel): ResponseModel {
+    suspend fun addMoneyToWalletFromCard(
+        @PathVariable customerId: String,
+        @PathVariable amount: BigDecimal,
+        @RequestBody cardModel: CardModel,
+    ): ResponseModel {
         return try {
             walletService.depositMoneyToWallet(amount, customerId, cardModel)
             ResponseModel("200", "Success")
-        } catch (ex: WalletNotFoundException){
-            ResponseModel("404","Wallet not found")
+        } catch (ex: WalletNotFoundException) {
+            ResponseModel("404", "Wallet not found")
         }
     }
 
     @DeleteMapping("/{customerId}/amount/{amount}")
-    fun withdrawMoney(@PathVariable customerId: String, @PathVariable amount: BigDecimal,): ResponseModel {
+    fun withdrawMoney(
+        @PathVariable customerId: String,
+        @PathVariable amount: BigDecimal,
+    ): ResponseModel {
         return try {
             walletService.withdrawMoney(amount, customerId)
             ResponseModel("200", "Success")
-
-        } catch (ex: WalletNotFoundException){
-            ResponseModel("404","Wallet not found")
-        } catch (ex: PaymentExceedsBalanceException){
-            ResponseModel("500","Payment exceeds balance")
+        } catch (ex: WalletNotFoundException) {
+            ResponseModel("404", "Wallet not found")
+        } catch (ex: PaymentExceedsBalanceException) {
+            ResponseModel("500", "Payment exceeds balance")
         }
     }
 
     @GetMapping("/{customerId}/cards")
-    fun getCards(@PathVariable customerId: String): List<CardModel> {
+    fun getCards(
+        @PathVariable customerId: String,
+    ): List<CardModel> {
         return cardService.getCards(customerId)
     }
 
     @PostMapping("/{customerId}/cards")
-    fun saveCard(@RequestBody cardModel: CardModel, @PathVariable customerId: String){
+    fun saveCard(
+        @RequestBody cardModel: CardModel,
+        @PathVariable customerId: String,
+    ) {
         cardService.saveCard(customerId, cardModel)
     }
 }

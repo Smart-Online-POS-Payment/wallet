@@ -10,10 +10,9 @@ import org.springframework.web.reactive.function.client.awaitBody
 @Service
 class IstepayClient(
     @Qualifier("istepayWebClient")
-    val client: WebClient
+    val client: WebClient,
 ) {
-
-    suspend fun depositMoney(depositMoneyModel: DepositMoneyModel ): DepositResponseModel {
+    suspend fun depositMoney(depositMoneyModel: DepositMoneyModel): DepositResponseModel {
         return client.post().uri("/payment").bodyValue(depositMoneyModel).retrieve().awaitBody()
     }
 }

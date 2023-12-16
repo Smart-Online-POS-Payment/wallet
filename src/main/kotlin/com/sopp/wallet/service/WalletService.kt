@@ -13,9 +13,8 @@ import java.math.BigDecimal
 class WalletService(
     private val walletRepository: WalletRepository,
     private val authService: AuthService,
-    private val istepayService: IstepayService
+    private val istepayService: IstepayService,
 ) {
-
     fun getWallet(customerId: String): WalletEntity {
         return walletRepository.findByCustomerId(customerId) ?: throw WalletNotFoundException("Cant find the wallet")
     }
@@ -24,36 +23,47 @@ class WalletService(
         return walletRepository.save(WalletEntity(customerId = customerId, balance = BigDecimal.ZERO))
     }
 
-    fun addMoneyToWallet(amount: BigDecimal, customerId: String){
-        if(amount <= BigDecimal.ZERO) throw NegativeAmountException()
+    fun addMoneyToWallet(
+        amount: BigDecimal,
+        customerId: String,
+    ) {
+        if (amount <= BigDecimal.ZERO) throw NegativeAmountException()
 
-        val walletEntity = walletRepository.findByCustomerId(customerId)
-            ?: throw WalletNotFoundException("Can't find the wallet")
-        walletEntity.balance+=amount
+        val walletEntity =
+            walletRepository.findByCustomerId(customerId)
+                ?: throw WalletNotFoundException("Can't find the wallet")
+        walletEntity.balance += amount
         walletRepository.save(walletEntity)
     }
 
-    suspend fun depositMoneyToWallet(amount: BigDecimal, customerId: String, cardModel: CardModel){
-        if(amount <= BigDecimal.ZERO) throw NegativeAmountException()
+    suspend fun depositMoneyToWallet(
+        amount: BigDecimal,
+        customerId: String,
+        cardModel: CardModel,
+    ) {
+        if (amount <= BigDecimal.ZERO) throw NegativeAmountException()
         try {
             val user = authService.getUser(customerId)
-            if (istepayService.depositMoney(cardModel, user, amount).transaction.operation.succeeded){
+            if (istepayService.depositMoney(cardModel, user, amount).transaction.operation.succeeded) {
                 val walletEntity = walletRepository.findByCustomerId(customerId) ?: throw WalletNotFoundException("Cant find the wallet")
-                walletEntity.balance+=amount
+                walletEntity.balance += amount
                 walletRepository.save(walletEntity)
             }
-        }catch (e: Exception){
-            //Todo: Log the error message
+        } catch (e: Exception) {
+            // Todo: Log the error message
         }
     }
 
-    fun withdrawMoney(amount: BigDecimal, customerId: String){
+    fun withdrawMoney(
+        amount: BigDecimal,
+        customerId: String,
+    ) {
         val walletEntity = walletRepository.findByCustomerId(customerId) ?: throw WalletNotFoundException("Cant find the wallet")
 
-        if(walletEntity.balance<amount){
+        if (walletEntity.balance < amount) {
             throw PaymentExceedsBalanceException("Withdraw amount exceeds the balance")
         }
-        walletEntity.balance-=amount
+        walletEntity.balance -= amount
         walletRepository.save(walletEntity)
     }
 }

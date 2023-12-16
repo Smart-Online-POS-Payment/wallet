@@ -1,6 +1,6 @@
 package com.sopp.wallet.model
 
-import java.util.*
+import java.util.UUID
 
 data class DepositMoneyModel(
     val transactionCommand: TransactionCommand,

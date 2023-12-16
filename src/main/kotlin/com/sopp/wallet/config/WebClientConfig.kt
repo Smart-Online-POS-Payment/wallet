@@ -10,11 +10,16 @@ class WebClientConfig(
     val clientBuilder: WebClient.Builder,
 ) {
     @Bean("istepayWebClient")
-    fun istepayWebClient(@Value("\${istepay.url}") baseUrl: String): WebClient {
+    fun istepayWebClient(
+        @Value("\${istepay.url}") baseUrl: String,
+    ): WebClient {
         return clientBuilder.baseUrl(baseUrl).build()
     }
+
     @Bean("authWebClient")
-    fun authWebClient(@Value("\${sopp.server.auth.url}") baseUrl: String): WebClient {
+    fun authWebClient(
+        @Value("\${sopp.server.auth.url}") baseUrl: String,
+    ): WebClient {
         return clientBuilder.baseUrl(baseUrl).build()
     }
 }
