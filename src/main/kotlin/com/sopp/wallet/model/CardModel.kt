@@ -11,9 +11,7 @@ data class CardModel(
     val cardholderName: String,
     val cardNumber: String,
     val cvvCode: String,
-    @field:JsonSerialize(using = ShortDateSerializer::class)
-    @field:JsonDeserialize(using = ShortDateDeserializer::class)
-    val expiryDate: LocalDate
+    val expiryDate: String
 ){
     constructor(cardEntity: CardEntity):this(cardholderName = cardEntity.cardholderName, cardNumber = cardEntity.cardNumber, cvvCode= cardEntity.cvvCode, expiryDate = cardEntity.expiryDate)
 }
