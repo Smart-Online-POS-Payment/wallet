@@ -6,11 +6,25 @@ import java.util.UUID
 
 data class TransactionResponse(
     val id: UUID,
-    val type: String,
+    val orderId: String,
+    val type: Type,
+    val status: Status,
     val date: Instant,
     val amount: BigDecimal,
-    val currency: String,
-    val operation: Operation,
-    val response: Map<String, Any>? = null,
-    val error: BankError? = null,
-)
+    val currency: CurrencyCode = CurrencyCode.TRY,
+    val error: Error? = null
+) {
+    enum class Type {
+        Auth
+    }
+
+    enum class Status {
+        Processing,
+        SecurePageGenerated,
+        Succeeded,
+        Failed,
+        Unknown,
+        Cancelled
+    }
+}
+

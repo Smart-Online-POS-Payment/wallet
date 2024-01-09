@@ -14,13 +14,13 @@ data class CardEntity(
     val id: UUID = UUID.randomUUID(),
     val customerId: String,
     val cardNumber: String,
-    val cardHolderName: String,
+    val cardholderName: String,
     val cvvCode: String,
-    val expiryDate: String,
+    val expiryDate: LocalDate,
 ) {
     constructor(
         customerId: String,
         cardModel: CardModel,
-    ) : this(UUID.randomUUID(), customerId, cardModel.cardNumber, cardModel.cardHolderName, cardModel.cvvCode, cardModel.expiryDate)
-    constructor() : this(UUID.randomUUID(), "", "", "", "", LocalDate.now().toString())
+    ) : this(UUID.randomUUID(), customerId, cardModel.cardNumber, cardModel.cardholderName, cardModel.cvvCode, cardModel.expiryDate)
+    constructor() : this(UUID.randomUUID(), "", "", "", "", LocalDate.now())
 }

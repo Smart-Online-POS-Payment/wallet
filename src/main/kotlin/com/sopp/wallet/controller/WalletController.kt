@@ -65,8 +65,8 @@ class WalletController(
         return try {
             walletService.depositMoneyToWallet(amount, customerId, cardModel)
             ResponseModel("200", "Success")
-        } catch (ex: WalletNotFoundException) {
-            ResponseModel("404", "Wallet not found")
+        } catch (ex: Exception) {
+            ResponseModel("500", ex.message.toString())
         }
     }
 

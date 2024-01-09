@@ -4,6 +4,5 @@ import java.math.BigDecimal
 
 data class TransactionCommand(
     val orderId: String,
-    val transactionType: String = "Auth",
-    val amount: BigDecimal,
+    val amount: BigDecimal
 )

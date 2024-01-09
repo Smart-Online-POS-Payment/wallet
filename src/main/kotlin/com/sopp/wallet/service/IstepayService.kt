@@ -1,11 +1,7 @@
 package com.sopp.wallet.service
 
 import com.sopp.wallet.client.IstepayClient
-import com.sopp.wallet.model.CardModel
-import com.sopp.wallet.model.DepositMoneyModel
-import com.sopp.wallet.model.DepositResponseModel
-import com.sopp.wallet.model.TransactionCommand
-import com.sopp.wallet.model.VerifiedUserModel
+import com.sopp.wallet.model.*
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.util.UUID
@@ -23,9 +19,10 @@ class IstepayService(
             DepositMoneyModel(
                 transactionCommand = TransactionCommand(orderId = UUID.randomUUID().toString(), amount = amount),
                 card = cardModel,
-                buyerInformation = user,
-                merchantId = UUID.fromString(""),
-            )
+                buyerInformation = BuyerInformation(user),
+                billingAddress = Address(user),
+                basketItems = listOf(BasketItem(id = UUID.randomUUID().toString(), name = "deposit money", category = "finance", itemType = "Virtual", price = amount, productType = BasketItem.ProductType.Virtual))
+                )
         return istepayClient.depositMoney(depositMoneyModel)
     }
 }

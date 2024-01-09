@@ -12,10 +12,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 database:
-  endpoint: localhost:5432
-  name: sopp
-  user: db_user
-  password: db_pass
+  endpoint: 34.28.23.25:5432
+  name: postgres
+  user: postgres
+  password: KP^FOz63OneNl{dH
 server:
   port: 8082
 sopp:
@@ -23,4 +23,4 @@ sopp:
     auth:
       url: http://localhost:8081
 istepay:
-  url: http://localhost:10000
+  url: https://api.istepay-dev.valensas.com/payment/auth

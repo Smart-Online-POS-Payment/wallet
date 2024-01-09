@@ -5,6 +5,7 @@ import com.sopp.wallet.exception.NegativeAmountException
 import com.sopp.wallet.exception.PaymentExceedsBalanceException
 import com.sopp.wallet.exception.WalletNotFoundException
 import com.sopp.wallet.model.CardModel
+import com.sopp.wallet.model.TransactionResponse
 import com.sopp.wallet.repository.WalletRepository
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -44,10 +45,19 @@ class WalletService(
         if (amount <= BigDecimal.ZERO) throw NegativeAmountException()
         try {
             val user = authService.getUser(customerId)
-            if (istepayService.depositMoney(cardModel, user, amount).transaction.operation.succeeded) {
-                val walletEntity = walletRepository.findByCustomerId(customerId) ?: throw WalletNotFoundException("Cant find the wallet")
-                walletEntity.balance += amount
-                walletRepository.save(walletEntity)
+            val transactionResponse = istepayService.depositMoney(cardModel, user, amount).transaction
+            if (transactionResponse.status == TransactionResponse.Status.Succeeded || transactionResponse.status == TransactionResponse.Status.Processing) {
+                val walletEntity = walletRepository.findByCustomerId(customerId)
+
+                if(walletEntity == null){
+                    val newWallet = createWallet(customerId)
+                    newWallet.balance += amount
+                    walletRepository.save(newWallet)
+                }
+                else{
+                    walletEntity.balance += amount
+                    walletRepository.save(walletEntity)
+                }
             }
         } catch (e: Exception) {
             // Todo: Log the error message

@@ -1,13 +1,15 @@
 package com.sopp.wallet.model
 
+import java.time.Instant
+
 data class VerifiedUserModel(
-    val name: String,
+    val userId: String,
+    val tc: Long,
+    val firstname: String,
     val surname: String,
-    val citizenId: String,
-    val gsmNumber: String,
     val email: String,
-    val registrationAddress: String,
-    val ip: String,
-    val buyerId: String,
-    val userAgent: String,
+    val phoneNumber: String,
+    val openAddress: String,
+    val city: String,
+    val country: String,
 )
