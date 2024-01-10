@@ -17,7 +17,7 @@ class WalletService(
     private val istepayService: IstepayService,
 ) {
     fun getWallet(customerId: String): WalletEntity {
-        return walletRepository.findByCustomerId(customerId) ?: throw WalletNotFoundException("Cant find the wallet")
+        return walletRepository.findByCustomerId(customerId) ?: createWallet(customerId)
     }
 
     fun createWallet(customerId: String): WalletEntity {
@@ -46,6 +46,7 @@ class WalletService(
         try {
             val user = authService.getUser(customerId)
             val transactionResponse = istepayService.depositMoney(cardModel, user, amount).transaction
+            println("Response:$transactionResponse")
             if (transactionResponse.status == TransactionResponse.Status.Succeeded || transactionResponse.status == TransactionResponse.Status.Processing) {
                 val walletEntity = walletRepository.findByCustomerId(customerId)
 
@@ -60,7 +61,7 @@ class WalletService(
                 }
             }
         } catch (e: Exception) {
-            // Todo: Log the error message
+            println("Exception${e.message}")
         }
     }
 

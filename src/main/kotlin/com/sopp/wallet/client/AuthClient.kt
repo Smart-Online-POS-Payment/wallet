@@ -12,6 +12,6 @@ class AuthClient(
     val client: WebClient,
 ) {
     suspend fun getUser(customerId: String): VerifiedUserModel {
-        return client.get().uri("/customer/$customerId").retrieve().awaitBody()
+        return client.get().uri("verify/customer/$customerId").retrieve().awaitBody()
     }
 }

@@ -17,7 +17,7 @@ class IstepayService(
     ): DepositResponseModel {
         val depositMoneyModel =
             DepositMoneyModel(
-                transactionCommand = TransactionCommand(orderId = UUID.randomUUID().toString(), amount = amount),
+                command = TransactionCommand(orderId = UUID.randomUUID().toString(), amount = amount),
                 card = cardModel,
                 buyerInformation = BuyerInformation(user),
                 billingAddress = Address(user),

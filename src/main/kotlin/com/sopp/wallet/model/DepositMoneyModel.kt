@@ -1,7 +1,7 @@
 package com.sopp.wallet.model
 
 data class DepositMoneyModel(
-    val transactionCommand: TransactionCommand,
+    val command: TransactionCommand,
     val card: CardModel,
     val buyerInformation: BuyerInformation,
     val billingAddress: Address,

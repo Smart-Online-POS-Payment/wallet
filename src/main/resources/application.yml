@@ -24,3 +24,4 @@ sopp:
       url: http://localhost:8081
 istepay:
   url: https://api.istepay-dev.valensas.com/payment/auth
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl9pZCI6IjhmNWRiYzEyLTRkNzktNDZiZi04Yjc4LTBkOGU1NjI0NjFlZiIsIm1lcmNoYW50X2lkIjoiYzNmZTdlYjctNzhhZC00ODc3LTkwNGItODdhOGVmMjgxN2IwIiwiY3JlYXRlZF9kYXRlIjoxNzAzNjgyMTYxLCJleHBpcmVfYXQiOm51bGwsInRva2VuX25hbWUiOiJ1bm5hbWVkX3Rva2VuXzUiLCJjcmVhdGVkX2J5Ijoib2Rlbml6dHVya2VyIC0gbm8taXAifQ.zVInxNOmRHT6Ilizh-fjk-JXel1UEsMEV4l2G33KN1M
