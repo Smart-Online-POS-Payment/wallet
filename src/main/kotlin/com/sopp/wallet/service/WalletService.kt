@@ -7,6 +7,8 @@ import com.sopp.wallet.exception.WalletNotFoundException
 import com.sopp.wallet.model.CardModel
 import com.sopp.wallet.model.TransactionResponse
 import com.sopp.wallet.repository.WalletRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
@@ -16,6 +18,8 @@ class WalletService(
     private val authService: AuthService,
     private val istepayService: IstepayService,
 ) {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     fun getWallet(customerId: String): WalletEntity {
         return walletRepository.findByCustomerId(customerId) ?: createWallet(customerId)
     }
@@ -44,9 +48,11 @@ class WalletService(
     ) {
         if (amount <= BigDecimal.ZERO) throw NegativeAmountException()
         try {
+            logger.info("Starting to deposit money to wallet...")
             val user = authService.getUser(customerId)
+            logger.info("Got user:$user")
             val transactionResponse = istepayService.depositMoney(cardModel, user, amount).transaction
-            println("Response:$transactionResponse")
+            logger.info("Response:$transactionResponse")
             if (transactionResponse.status == TransactionResponse.Status.Succeeded || transactionResponse.status == TransactionResponse.Status.Processing) {
                 val walletEntity = walletRepository.findByCustomerId(customerId)
 

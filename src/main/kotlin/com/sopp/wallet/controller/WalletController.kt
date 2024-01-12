@@ -7,6 +7,7 @@ import com.sopp.wallet.model.CardModel
 import com.sopp.wallet.model.ResponseModel
 import com.sopp.wallet.service.CardService
 import com.sopp.wallet.service.WalletService
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,11 +26,13 @@ class WalletController(
     private val walletService: WalletService,
     private val cardService: CardService,
 ) {
+    private val logger = LoggerFactory.getLogger(javaClass)
     @GetMapping("/{customerId}")
     fun getWallet(
         @PathVariable customerId: String,
     ): WalletEntity {
         try {
+            logger.info("Request received to get wallet")
             return walletService.getWallet(customerId)
         } catch (ex: WalletNotFoundException) {
             throw ResponseStatusException(HttpStatusCode.valueOf(404), ex.localizedMessage, ex)
@@ -48,6 +51,7 @@ class WalletController(
         @PathVariable customerId: String,
         @PathVariable amount: BigDecimal,
     ): ResponseModel {
+        logger.info("Request received to add money to card")
         return try {
             walletService.addMoneyToWallet(amount, customerId)
             ResponseModel("200", "Success")
@@ -62,6 +66,7 @@ class WalletController(
         @PathVariable amount: BigDecimal,
         @RequestBody cardModel: CardModel,
     ): ResponseModel {
+        logger.info("Request received to card payment")
         return try {
             walletService.depositMoneyToWallet(amount, customerId, cardModel)
             ResponseModel("200", "Success")
@@ -89,6 +94,7 @@ class WalletController(
     fun getCards(
         @PathVariable customerId: String,
     ): List<CardModel> {
+        logger.info("Request received to get cards")
         return cardService.getCards(customerId)
     }
 
@@ -97,6 +103,7 @@ class WalletController(
         @RequestBody cardModel: CardModel,
         @PathVariable customerId: String,
     ) {
+        logger.info("Request received to save cards")
         cardService.saveCard(customerId, cardModel)
     }
 }
